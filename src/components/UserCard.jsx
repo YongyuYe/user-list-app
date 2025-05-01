@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-export default function UserCard({ name, role, avatar, email, bio }) {
+export default function UserCard({ name, role, avatar, email, bio, onDelete }) {
   const [showDetails, setShowDetails] = useState(false);
 
   const toggleDetails = () => {
@@ -46,6 +46,8 @@ export default function UserCard({ name, role, avatar, email, bio }) {
           <p><strong>Bio:</strong> {bio}</p>
         </div>
       )}
+
+      <button onClick={()=>onDelete(email)}> Delete this user</button>
     </div>
   );
 }

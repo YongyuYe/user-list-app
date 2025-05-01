@@ -42,6 +42,12 @@ export default function UserList() {
     setNewUser({ name: "", role: "", email: "" }); // 清空表单
   };
 
+  const handleDelete = (emailToDelete) => {
+    const updatedUsers = users.filter(user => user.email !== emailToDelete);
+    setUsers(updatedUsers);
+  };
+  
+
   return (
     <div>
       <input
@@ -84,7 +90,7 @@ export default function UserList() {
 
       {/* 用户列表 */}
       {filteredUsers.map((user, index) => (
-        <UserCard key={index} {...user} />
+        <UserCard key={index} {...user} onDelete={handleDelete}/>
       ))}
     </div>
   );
