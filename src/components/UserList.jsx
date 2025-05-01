@@ -1,36 +1,46 @@
 import { useState } from 'react';
 import UserCard from './UserCard';
 
-const allUsers = [
-  {
-    name: "Alice",
-    role: "Engineer",
-    avatar: "https://i.pravatar.cc/50?u=alice",
-    email: "alice@example.com",
-    bio: "Loves solving complex problems and hiking on weekends."
-  },
-  {
-    name: "Bob",
-    role: "Designer",
-    avatar: "https://i.pravatar.cc/50?u=bob",
-    email: "bob@example.com",
-    bio: "Passionate about minimalist design and coffee."
-  },
-  {
-    name: "Charlie",
-    role: "Product Manager",
-    avatar: "https://i.pravatar.cc/50?u=charlie",
-    email: "charlie@example.com",
-    bio: "Coordinates teams and keeps everything on track."
-  }
-];
-
 export default function UserList() {
-  const [searchText, setSearchText] = useState("");
+  const [users, setUsers] = useState([
+    {
+      name: "Alice",
+      role: "Engineer",
+      avatar: "https://i.pravatar.cc/50?u=alice",
+      email: "alice@example.com",
+      bio: "Loves solving complex problems and hiking on weekends."
+    },
+    {
+      name: "Bob",
+      role: "Designer",
+      avatar: "https://i.pravatar.cc/50?u=bob",
+      email: "bob@example.com",
+      bio: "Passionate about minimalist design and coffee."
+    }
+  ]);
 
-  const filteredUsers = allUsers.filter(user =>
+  const [searchText, setSearchText] = useState("");
+  const [newUser, setNewUser] = useState({ name: "", role: "", email: "" });
+
+  const filteredUsers = users.filter(user =>
     user.name.toLowerCase().includes(searchText.toLowerCase())
   );
+
+  const handleAddUser = () => {
+    if (!newUser.name || !newUser.role || !newUser.email) {
+      alert("Please fill in all fields");
+      return;
+    }
+
+    const addedUser = {
+      ...newUser,
+      avatar: `https://i.pravatar.cc/50?u=${newUser.email}`,
+      bio: "This is a new user."
+    };
+
+    setUsers([...users, addedUser]);
+    setNewUser({ name: "", role: "", email: "" }); // 清空表单
+  };
 
   return (
     <div>
@@ -48,13 +58,34 @@ export default function UserList() {
         }}
       />
 
+      {/* 添加新用户表单 */}
+      <div style={{ marginBottom: "20px" }}>
+        <h3>Add New User</h3>
+        <input
+          placeholder="Name"
+          value={newUser.name}
+          onChange={e => setNewUser({ ...newUser, name: e.target.value })}
+          style={{ marginRight: "8px", padding: "4px" }}
+        />
+        <input
+          placeholder="Role"
+          value={newUser.role}
+          onChange={e => setNewUser({ ...newUser, role: e.target.value })}
+          style={{ marginRight: "8px", padding: "4px" }}
+        />
+        <input
+          placeholder="Email"
+          value={newUser.email}
+          onChange={e => setNewUser({ ...newUser, email: e.target.value })}
+          style={{ marginRight: "8px", padding: "4px" }}
+        />
+        <button onClick={handleAddUser}>Add User</button>
+      </div>
+
+      {/* 用户列表 */}
       {filteredUsers.map((user, index) => (
         <UserCard key={index} {...user} />
       ))}
-
-      {filteredUsers.length === 0 && (
-        <p style={{ color: "gray" }}>No users found.</p>
-      )}
     </div>
   );
 }
